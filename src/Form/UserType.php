@@ -31,17 +31,8 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
 
-            ->add('firstName', TextType::class, [
-                'label' => 'Prénom',
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('name', TextType::class, [
-                'label' => 'Nom',
-            ])
-
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
-
                 'label' => 'mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -51,6 +42,14 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('firstName', TextType::class, [
+                'label' => 'Prénom',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+            ])
+
             ->add('picture', FileType::class, [
                 'label' => 'Photo',
                 'mapped' => false,
@@ -112,8 +111,6 @@ class UserType extends AbstractType
                 ]);
             };
         });
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

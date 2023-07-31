@@ -8,16 +8,26 @@ use App\Repository\UserRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
 
 class UserController extends AbstractController
 {
+
+    private $csrfTokenManager;
+
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[IsGranted("ROLE_USER")]
     #[Route('/user', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
@@ -26,18 +36,24 @@ class UserController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
-
-
     #[Route('/rh')]
     #[IsGranted("ROLE_RH")]
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader, UserRepository $userRepo): Response
+    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager,FileUploader $fileUploader, UserRepository $userRepo) :Response
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $user= new User();
+
+        $form = $this->createForm(UserType::class,$user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
             $imageFile = $form->get('picture')->getData();
             if ($imageFile) {
                 $imageFileName = $fileUploader->upload($imageFile);
@@ -45,7 +61,7 @@ class UserController extends AbstractController
             }
             $entityManager->persist($user);
             $entityManager->flush();
-            $this->addFlash('success', "L'utilisateur a été créé avec succès.");
+            $this->addFlash('success', 'L\'utilisateur a été créé avec succès.');
             return $this->redirectToRoute('app_user_index');
         }
 
@@ -63,7 +79,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, FileUploader $fileUploader, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, FileUploader $fileUploader,UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $currentPassword = $user->getPassword();
         $form = $this->createForm(UserType::class, $user);
@@ -88,10 +104,9 @@ class UserController extends AbstractController
                 $user->setPassword($currentPassword);
             }
 
-            if ($form->get('contractType')->getData() == 'CDI') {
+            if($form->get('contractType')->getData() == 'CDI'){
                 $user->setExitDate(null);
-            }
-
+            };
             $entityManager->flush();
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -102,19 +117,19 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    #[Route('/{id}', name: 'app_user_delete', methods: ['GET', 'POST'])]
+    public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+        if ($request->isMethod('POST') && $this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'L\'utilisateur a été supprimé avec succès.');
         }
-        $form = $this->createForm(UserType::class, $user);
-        $imageFile = $form->get('picture')->getData();
-        if ($imageFile) {
-            $fileUploader->removeFile($imageFile);
-            $imageFile->remove($imageFile);
-        }
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+
+
+        return $this->redirectToRoute('app_user_index');
     }
+
 }
