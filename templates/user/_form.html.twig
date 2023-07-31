@@ -45,11 +45,10 @@
                                             {{ form_label(form.contractType) }}
                                             {{ form_widget(form.contractType, {'attr': {'class': 'form-select'}}) }}
                                         </div>
-                                    {%  if form.exitDate is defined %}
                                         <div id="exitDateField" class="form-group m-3" style="display: none;">
                                             {{ form_row(form.exitDate) }}
                                         </div>
-                                    {% endif %}
+
                                         <div>
                                             {{ form_errors(form) }}
                                             {{ form_end(form) }}
