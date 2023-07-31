@@ -94,6 +94,10 @@ class UserController extends AbstractController
             } else {
                 $user->setPassword($currentPassword);
             }
+
+            if($form->get('contractType')->getData() == 'CDI'){
+                $user->setExitDate(null);
+            };
             $entityManager->flush();
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }

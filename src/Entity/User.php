@@ -51,6 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank (message: "Veuillez saisir un mot de passe")]
     #[Assert\Regex(
         pattern: "/^(?=.*[a-z])(?=.*\d).{8,}$/i",
         message: "Le mot de passe doit avoir au moins 8 caractères,  1 chiffre et 1 lettre."
@@ -73,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $area = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Choice(choices: ["CDI", "CDD", "Intérim"], message: "Veuillez sélectionner une valeur valide parmi les choix proposés.")]
+    #[Assert\Choice(choices: ["CDI", "CDD", "INTERIM"], message: "Veuillez sélectionner une valeur valide parmi les choix proposés.")]
     private ?string $contractType = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]

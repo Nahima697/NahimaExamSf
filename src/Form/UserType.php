@@ -33,7 +33,6 @@ class UserType extends AbstractType
 
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
-                'required' =>false,
                 'label' => 'mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -104,7 +103,7 @@ class UserType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $user = $event->getData();
             $form = $event->getForm();
-            if (isset($user['contractType']) && in_array($user['contractType'], ['CDD','INTERIM'])) {
+            if (isset($user['contractType']) && in_array($user['contractType'], ['CDD', 'INTERIM'])) {
                 $form->add('exitDate', DateType::class, [
                     'label' => 'Date de fin de contrat',
                     'required' => false,
