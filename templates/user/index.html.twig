@@ -28,7 +28,7 @@
                                 <img class="img-fluid" src="{{ asset('uploads/user/No-image.png') }}" alt="Image par défaut" style="max-height: 200px; width: auto;">
                             {% endif %}
                         </div>
-                        <h5 class="card-title mt-3 mb-3">Nom: {{ user.name }}</h5>
+                        <h5 class="card-title mt-3 mb-3">Nom: {{ user.name }} {{ user.firstName }}</h5>
                         <p class="card-text">Email: {{ user.email }}</p>
                         <p class="card-text">Contrat: {{ user.contractType }}</p>
                         {% if user.exitDate %}
