@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1 class="text-center">Bienvenue dans notre Interface RH</h1>
+</div>
+
+   <div class="hero-container" id="hero-sec">
+    <div class="container-fluid ">
+        <div class="row d-flex">
+            <div class="col align-middle">
+                <div class="px-2 py-2">
+                    <img src="https://img.freepik.com/vecteurs-libre/responsable-ressources-humaines-employe-entrevue-organigramme-entreprise-logiciel-evaluation-employes-systeme-entreprise-rh-illustration-concept-programme-verification-employes_335657-2088.jpg?w=996&t=st=1690791407~exp=1690792007~hmac=e5efb97fd5f868176964310afeb8ee033864af511aad581f57482a83d2d5ebfc" class="img-fluid" alt="...">
+                </div>
+            </div>
+            <div class="col">
+                <div class="px-5 py-5 mt-5">
+                    <div class="px-2 py-2 align-middle">
+                        <h4>Retrouver votre fiche salarié ou</h4>
+                        <p> Trouver la liste de vos collègues, leur coordonnées, et leurs services.</p>
+                    </div>
+                    <div class="px-2 py-2">
+                        <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Se connecter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

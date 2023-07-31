@@ -1,0 +1,93 @@
+
+{% block body %}
+
+<section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+                                <div class="text-center">
+                                    <img src="https://static.vecteezy.com/system/resources/thumbnails/004/699/321/small/rh-or-hr-letter-logo-isolated-on-white-background-vector.jpg"
+                                         style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1">Notre interface Rh</h4>
+                                </div>
+
+                                        {{ form_start(form) }}
+                                        <div class="form-group m-3">
+                                            {{ form_label(form.firstName) }}
+                                            {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group m-3">
+                                            {{ form_label(form.name) }}
+                                            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group m-3">
+                                            {{ form_row(form.email) }}
+
+                                        </div>
+                                        <div class="form-group m-3">
+                                            {{ form_row(form.plainPassword, {
+                                                label: 'Password'
+                                            }) }}
+                                        </div>
+                                        <div class="form-group m-3">
+                                            {{ form_label(form.picture) }}
+                                            {{ form_widget(form.picture, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                        <div class="form-group m-3">
+                                            {{ form_label(form.area) }}
+                                            {{ form_widget(form.area, {'attr': {'class': 'form-select'}}) }}
+                                        </div>
+                                        <div class="form-group m-3">
+                                            {{ form_label(form.contractType) }}
+                                            {{ form_widget(form.contractType, {'attr': {'class': 'form-select'}}) }}
+                                        </div>
+                                    {%  if form.exitDate is defined %}
+                                        <div id="exitDateField" class="form-group m-3" style="display: none;">
+                                            {{ form_row(form.exitDate) }}
+                                        </div>
+                                    {% endif %}
+                                        <div>
+                                            {{ form_errors(form) }}
+                                            {{ form_end(form) }}
+                                            <a  class='btn btn-success' href="{{ path('app_user_index') }}">Revenir à la liste</a>
+                                        </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                <h4 class="mb-4">Notre plateforme qui vous facilite la vie</h4>
+                                <p class="small mb-0">Découvrez notre interface simple et utile.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const contractTypeField = document.getElementById('{{ form.contractType.vars.id }}');
+        const exitDateField = document.getElementById('exitDateField');
+
+        const toggleExitDateField = function () {
+            if (contractTypeField.value === 'CDI') {
+                exitDateField.style.display = 'none';
+            } else {
+                exitDateField.style.display = 'block';
+            }
+        };
+
+        toggleExitDateField();
+
+        contractTypeField.addEventListener('change', function () {
+            toggleExitDateField();
+        });
+    });
+</script>
+{% endblock %}
+
