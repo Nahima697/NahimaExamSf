@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             {% for user in users %}
                 <div class="col-md-3 col-sm-6">
-                    <div class="card card-block">
+                    <div class="card card-block m-2">
                         <div class="d-flex justify-content-end">
                             <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Voir détail">
                                 <a href="{{ path('app_user_show', {'id': user.id}) }}"><img src="{{ asset('images/eye.svg') }}" height="20" width="20"></a>
@@ -21,20 +21,20 @@
                                 </span>
                             {% endif %}
                         </div>
-                        <div class="text-center mt-2"> <!-- Center the image -->
+                        <div class="text-center mt-2">
                             {% if user.picture %}
                                 <img class="img-fluid" src="{{ asset('uploads/user/' ~ user.picture) }}" alt="affiche {{ user.name }}" style="max-height: 200px; width: auto;">
                             {% else %}
                                 <img class="img-fluid" src="{{ asset('uploads/user/No-image.png') }}" alt="Image par défaut" style="max-height: 200px; width: auto;">
                             {% endif %}
                         </div>
-                        <h5 class="card-title mt-3 mb-3">Nom: {{ user.name }} {{ user.firstName }}</h5>
-                        <p class="card-text">Email: {{ user.email }}</p>
-                        <p class="card-text">Contrat: {{ user.contractType }}</p>
+                        <h5 class="card-title mt-3 mb-3 text-center">Nom: {{ user.name }} {{ user.firstName }}</h5>
+                        <p class="card-text text-center">Email: {{ user.email }}</p>
+                        <p class="card-text text-center">Contrat: {{ user.contractType }}</p>
                         {% if user.exitDate %}
-                            <p class="card-text">Date de départ: {{ user.exitDate ? user.exitDate|date('d/m/Y') : '' }}</p>
+                            <p class="card-text text-center">Date de départ: {{ user.exitDate ? user.exitDate|date('d/m/Y') : '' }}</p>
                         {% else %}
-                            <p class="card-text">Date de départ: Indéterminé</p>
+                            <p class="card-text text-center">Date de départ: Indéterminé</p>
                         {% endif %}
                     </div>
                 </div>
